@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Tracker</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Fixed Sidebar -->
+    <aside class="sidebar">
+        <div class="logo">
+            <i class="fas fa-wallet"></i>
+            <h2>Expense<span>Tracker</span></h2>
+        </div>
+        
+        <nav class="nav-menu">
+            <a href="#" class="nav-item active" data-page="dashboard">
+                <i class="fas fa-chart-bar"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="#" class="nav-item" data-page="add-expense">
+                <i class="fas fa-plus-circle"></i>
+                <span>Add Expense</span>
+            </a>
+            <a href="#" class="nav-item" data-page="reports">
+                <i class="fas fa-chart-pie"></i>
+                <span>Reports</span>
+            </a>
+            <a href="#" class="nav-item" data-page="all-expenses">
+                <i class="fas fa-list"></i>
+                <span>All Expenses</span>
+            </a>
+        </nav>
+        
+        <!-- User Info - Always at bottom -->
+        <div class="user-info">
+            <div class="user-avatar">
+                <i class="fas fa-user"></i>
+            </div>
+            <div class="user-details">
+                <h4>Student User</h4>
+                <p>1st Semester</p>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="container">
+        <main class="main-content">
+            <!-- Header -->
+            <header class="header">
+                <h1 id="page-title">Dashboard</h1>
+                <div class="date-display">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span id="current-date">Loading...</span>
+                </div>
+            </header>
+
+            <!-- Page Content -->
+            <div class="page-content">
+                <!-- Dashboard Page -->
+                <section id="dashboard-page" class="page active">
+                    <!-- Stats Cards -->
+                    <div class="stats-container">
+                        <div class="stat-card">
+                            <div class="stat-icon" style="background: #4CAF50;">
+                                <i class="fas fa-money-bill-wave"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3>Total Expenses</h3>
+                                <p class="stat-value" id="total-expense">PKR 0</p>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-icon" style="background: #2196F3;">
+                                <i class="fas fa-calendar-week"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3>This Month</h3>
+                                <p class="stat-value" id="month-expense">PKR 0</p>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-icon" style="background: #FF9800;">
+                                <i class="fas fa-tags"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3>Top Category</h3>
+                                <p class="stat-value" id="top-category">-</p>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-icon" style="background: #9C27B0;">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3>Daily Average</h3>
+                                <p class="stat-value" id="daily-average">PKR 0</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Charts Section -->
+                    <div class="charts-container">
+                        <div class="chart-box">
+                            <h3><i class="fas fa-chart-pie"></i> Category Distribution</h3>
+                            <div class="chart-wrapper">
+                                <canvas id="categoryChart"></canvas>
+                            </div>
+                        </div>
+                        
+                        <div class="chart-box">
+                            <h3><i class="fas fa-chart-bar"></i> Monthly Trend</h3>
+                            <div class="chart-wrapper">
+                                <canvas id="monthlyChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Expenses -->
+                    <div class="recent-expenses">
+                        <h3><i class="fas fa-history"></i> Recent Expenses</h3>
+                        <div class="table-wrapper">
+                            <table id="recent-table">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Category</th>
+                                        <th>Description</th>
+                                        <th>Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="recent-expenses-list">
+                                    <!-- Recent expenses will load here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Add Expense Page -->
+                <section id="add-expense-page" class="page">
+                    <div class="form-container">
+                        <h2><i class="fas fa-plus-circle"></i> Add New Expense</h2>
+                        <form id="expense-form">
+                            <div class="form-group">
+                                <label for="amount">Amount (PKR)</label>
+                                <input type="number" id="amount" placeholder="Enter amount" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="category">Category</label>
+                                <select id="category" required>
+                                    <option value="">Select Category</option>
+                                    <option value="Food">Food & Dining</option>
+                                    <option value="Transport">Transport</option>
+                                    <option value="Shopping">Shopping</option>
+                                    <option value="Entertainment">Entertainment</option>
+                                    <option value="Utilities">Utilities</option>
+                                    <option value="Education">Education</option>
+                                    <option value="Healthcare">Healthcare</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="date">Date</label>
+                                <input type="date" id="date" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="description">Description (Optional)</label>
+                                <textarea id="description" rows="3" placeholder="Enter description"></textarea>
+                            </div>
+                            
+                            <div class="form-buttons">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-save"></i> Save Expense
+                                </button>
+                                <button type="button" class="btn btn-secondary" id="clear-form">
+                                    <i class="fas fa-times"></i> Clear
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </section>
+
+                <!-- Reports Page -->
+                <section id="reports-page" class="page">
+                    <div class="reports-header">
+                        <h2><i class="fas fa-chart-pie"></i> Expense Reports</h2>
+                        <div class="filter-box">
+                            <select id="report-period">
+                                <option value="monthly">Monthly Report</option>
+                                <option value="weekly">Weekly Report</option>
+                            </select>
+                            <select id="report-category">
+                                <option value="all">All Categories</option>
+                            </select>
+                            <button class="btn btn-primary" id="generate-report">
+                                <i class="fas fa-filter"></i> Generate
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Report Summary -->
+                    <div class="report-summary">
+                        <div class="summary-card">
+                            <h4>Total in Period</h4>
+                            <p id="report-total">PKR 0</p>
+                        </div>
+                        <div class="summary-card">
+                            <h4>Average Daily</h4>
+                            <p id="report-average">PKR 0</p>
+                        </div>
+                        <div class="summary-card">
+                            <h4>Highest Expense</h4>
+                            <p id="report-highest">PKR 0</p>
+                        </div>
+                        <div class="summary-card">
+                            <h4>Entries Count</h4>
+                            <p id="report-count">0</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Report Chart -->
+                    <div class="report-chart">
+                        <h3><i class="fas fa-chart-bar"></i> Visual Report</h3>
+                        <div class="chart-wrapper">
+                            <canvas id="reportChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <!-- Report Table -->
+                    <div class="report-table">
+                        <h3><i class="fas fa-table"></i> Report Data</h3>
+                        <div class="table-wrapper">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Category</th>
+                                        <th>Description</th>
+                                        <th>Amount (PKR)</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="report-data">
+                                    <!-- Report data will load here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- All Expenses Page -->
+                <section id="all-expenses-page" class="page">
+                    <div class="expenses-header">
+                        <h2><i class="fas fa-list"></i> All Expenses</h2>
+                        <div class="search-box">
+                            <input type="text" id="search-expense" placeholder="Search expenses...">
+                            <button class="btn btn-danger" id="delete-all">
+                                <i class="fas fa-trash"></i> Delete All
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Category</th>
+                                    <th>Description</th>
+                                    <th>Amount (PKR)</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="all-expenses-list">
+                                <!-- All expenses will load here -->
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="expenses-footer">
+                        <p>Total Records: <span id="total-records">0</span></p>
+                    </div>
+                </section>
+            </div>
+            
+            <!-- Footer -->
+            <footer class="footer">
+                <p>Personal Expense Tracker | CSC100L Lab Project</p>
+                <p>Total Expenses: <span id="footer-total">0</span></p>
+            </footer>
+        </main>
+    </div>
+
+    <!-- Edit Modal -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <h3><i class="fas fa-edit"></i> Edit Expense</h3>
+            <form id="edit-form">
+                <input type="hidden" id="edit-id">
+                <div class="form-group">
+                    <label for="edit-amount">Amount (PKR)</label>
+                    <input type="number" id="edit-amount" required>
+                </div>
+                <div class="form-group">
+                    <label for="edit-category">Category</label>
+                    <select id="edit-category" required></select>
+                </div>
+                <div class="form-group">
+                    <label for="edit-date">Date</label>
+                    <input type="date" id="edit-date" required>
+                </div>
+                <div class="form-group">
+                    <label for="edit-description">Description</label>
+                    <textarea id="edit-description" rows="3"></textarea>
+                </div>
+                <div class="modal-buttons">
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                    <button type="button" class="btn btn-secondary" id="close-edit">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Chart.js Library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
